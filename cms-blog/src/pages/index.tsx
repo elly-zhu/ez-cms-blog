@@ -3,6 +3,7 @@ import Head from "next/head";
 import { PostCard, Categories, PostWidget } from "../components";
 import { getPosts } from "@/services";
 import { PostProps } from "@/components/PostCommon";
+import FeaturedPosts from "@/sections/FeaturePosts";
 
 type PostConnection = {
   node: PostProps;
@@ -19,10 +20,11 @@ const Home: React.FC<HomeProps> = ({ postconnections }) => {
         <title>CMS Blog</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <FeaturedPosts />
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-8 col-span-1">
           {postconnections.map((postconnection, index) => (
-            <PostCard key={index} {...postconnection.node} />
+            <PostCard key={index} post={postconnection.node} />
           ))}
         </div>
         <div className="lg:col-span-4 col-span-1">

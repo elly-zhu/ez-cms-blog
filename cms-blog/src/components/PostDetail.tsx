@@ -1,8 +1,8 @@
 import React from "react";
 import moment from "moment";
-import { PostProps } from "./PostCommon";
+import { Post } from "./PostCommon";
 
-const PostDetail: React.FC<PostProps> = ({ ...post }) => {
+const PostDetail: React.FC<Post> = ({ post }) => {
   const getContentFragment = (
     index: any,
     text: any,

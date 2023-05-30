@@ -1,6 +1,16 @@
 import { request, gql } from "graphql-request";
+import pThrottle from "p-throttle";
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
+const throttle = pThrottle({ limit: 3, interval: 1000 });
+
+export const throttledFetch = throttle(async (...args) => {
+  const [graphqlAPI, query, vars] = args;
+
+  const data = await request(graphqlAPI, query, vars);
+
+  return data;
+});
 
 export const getPosts = async () => {
   const query = gql`
@@ -36,7 +46,7 @@ export const getPosts = async () => {
     }
   `;
 
-  const result = await request(graphqlAPI, query);
+  const result = await throttledFetch(graphqlAPI, query);
 
   return result.postsConnection.edges;
 };
@@ -71,7 +81,7 @@ export const getPostDetails = async (slug) => {
     }
   `;
 
-  const result = await request(graphqlAPI, query, { slug });
+  const result = await throttledFetch(graphqlAPI, query, { slug });
 
   return result;
 };
@@ -93,7 +103,7 @@ export const getRecentPosts = async () => {
     }
   `;
 
-  const result = await request(graphqlAPI, query);
+  const result = await throttledFetch(graphqlAPI, query);
 
   return result.posts;
 };
@@ -118,7 +128,7 @@ export const getSimilarPosts = async (categories, slug) => {
     }
   `;
 
-  const result = await request(graphqlAPI, query, { categories, slug });
+  const result = await throttledFetch(graphqlAPI, query, { categories, slug });
 
   return result.posts;
 };
@@ -133,7 +143,7 @@ export const getCategories = async () => {
     }
   `;
 
-  const result = await request(graphqlAPI, query);
+  const result = await throttledFetch(graphqlAPI, query);
 
   return result.categories;
 };
@@ -160,7 +170,32 @@ export const getComments = async (slug) => {
     }
   `;
 
-  const result = await request(graphqlAPI, query, { slug });
+  const result = await throttledFetch(graphqlAPI, query, { slug });
 
   return result.comments;
+};
+
+export const getFeaturedPosts = async () => {
+  const query = gql`
+    query GetCategoryPost() {
+      posts(where: {featuredPost: true}) {
+        author {
+          name
+          photo {
+            url
+          }
+        }
+        featuredImage {
+          url
+        }
+        title
+        slug
+        createdAt
+      }
+    }   
+  `;
+
+  const result = await throttledFetch(graphqlAPI, query);
+
+  return result.posts;
 };

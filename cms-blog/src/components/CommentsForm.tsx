@@ -96,7 +96,9 @@ const CommentsForm: React.FC<Partial<PostProps>> = ({ slug }) => {
           </label>
         </div>
       </div>
-      {error && <p className="text-xs text-red-500">All fields are required</p>}
+      {error && (
+        <p className="text-xs text-red-500">All fields are required.</p>
+      )}
       <div className="mt-8">
         <button
           type="button"

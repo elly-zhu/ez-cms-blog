@@ -1,12 +1,18 @@
+export interface Post {
+  post: PostProps;
+}
+
+export type Category = {
+  slug: string;
+  name: string;
+};
+
 export type PostProps = {
   title?: string;
   slug?: string;
   excerpt?: string;
   createdAt?: string;
-  categories?: {
-    slug: string;
-    name: string;
-  };
+  categories?: Category[];
   featuredImage?: {
     url: string;
   };

@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import moment from "moment";
 import Link from "next/link";
 import { getRecentPosts, getSimilarPosts } from "@/services";
+import { PostProps } from "./PostCommon";
 
-type PostWidgetProps = {
-  categories?: object;
-  slug?: string;
-  title?: string;
-  featuredImage?: {
-    url: string;
-  };
-  createdAt?: string;
-};
+export const PostWidget: React.FC<Partial<PostProps>> = ({
+  slug,
+  categories,
+}) => {
+  const [relatedPosts, setRelatedPosts] = useState<Partial<PostProps>[]>([]);
 
-export const PostWidget: React.FC<PostWidgetProps> = ({ slug, categories }) => {
-  const [relatedPosts, setRelatedPosts] = useState<PostWidgetProps[]>([]);
-
-  useEffect(() => {
+  useMemo(() => {
     if (slug) {
       getSimilarPosts(categories, slug).then((result) => {
-        console.log(result);
         setRelatedPosts(result);
       });
     } else {
       getRecentPosts().then((result) => {
-        console.log(result);
         setRelatedPosts(result);
       });
     }
