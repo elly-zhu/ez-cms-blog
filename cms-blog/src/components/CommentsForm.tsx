@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { PostProps } from "./PostCommon";
 import { submitComment } from "@/services";
+import { isExternalModuleNameRelative } from "typescript";
 
 const CommentsForm: React.FC<Partial<PostProps>> = ({ slug }) => {
   const [error, setError] = useState(false);
@@ -12,16 +13,19 @@ const CommentsForm: React.FC<Partial<PostProps>> = ({ slug }) => {
   const storeDataEl = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    nameEl.current.value = window.localStorage.getItem("name");
-    emailEl.current.value = window.localStorage.getItem("email");
+    if (nameEl.current != null && emailEl.current != null) {
+      nameEl.current.value = window.localStorage.getItem("name") ?? "";
+      emailEl.current.value = window.localStorage.getItem("email") ?? "";
+    }
   }, []);
 
   const handleCommentSubmission = () => {
     setError(false);
-    const { value: comment } = commentEl.current;
-    const { value: name } = nameEl.current;
-    const { value: email } = emailEl.current;
-    const { checked: storeData } = storeDataEl.current;
+    const comment = commentEl.current?.value;
+    const name = nameEl.current?.value;
+    const email = emailEl.current?.value;
+    const storeData = storeDataEl.current?.checked;
+
     if (!comment || !name || !email) {
       setError(true);
       return;

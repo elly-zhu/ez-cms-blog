@@ -1,5 +1,6 @@
 import React from "react";
 import { getPosts, getPostDetails } from "@/services";
+import { useRouter } from "next/router";
 import {
   PostDetail,
   Categories,
@@ -8,10 +9,14 @@ import {
   Comments,
   CommentsForm,
 } from "@/components";
+import { LoadingScreen } from "../../components";
 
 const PostDetails = ({ data }) => {
-  console.log(`slug`);
-  console.log(data);
+  const router = useRouter();
+
+  if (router.fallback) {
+    return <LoadingScreen addClassName="h-full" />;
+  }
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -49,6 +54,6 @@ export async function getStaticPaths() {
   const posts = await getPosts();
   return {
     paths: posts.map(({ node: { slug } }) => ({ params: { slug } })),
-    fallback: false,
+    fallback: true,
   };
 }
