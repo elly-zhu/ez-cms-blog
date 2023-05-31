@@ -14,7 +14,9 @@ const Comments: React.FC<Partial<PostProps>> = ({ slug }) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useMemo(() => {
-    getComments(slug).then((result) => setComments(result));
+    if (slug) {
+      getComments(slug).then((result) => setComments(result));
+    }
   }, [slug]);
 
   return (

@@ -2,7 +2,7 @@ import { request, gql } from "graphql-request";
 import pThrottle from "p-throttle";
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
-const throttle = pThrottle({ limit: 3, interval: 1000 });
+const throttle = pThrottle({ limit: 2, interval: 1000 });
 
 export const throttledFetch = throttle(async (...args) => {
   const [graphqlAPI, query, vars] = args;
@@ -231,7 +231,7 @@ export const getCategoryPost = async (slug) => {
     }
   `;
 
-  const result = await throttledFetch(graphqlAPI, query);
+  const result = await throttledFetch(graphqlAPI, query, { slug });
 
-  return result.posts;
+  return result.postsConnection.edges;
 };

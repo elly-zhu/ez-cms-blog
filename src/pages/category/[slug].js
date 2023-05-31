@@ -30,6 +30,8 @@ const CategoryPost = ({ posts }) => {
 };
 export default CategoryPost;
 
+// Specify dynamic routes to pre-render pages based on data.
+// The HTML is generated at build time and will be reused on each request.
 // Fetch data at build time
 export async function getStaticProps({ params }) {
   const posts = await getCategoryPost(params.slug);

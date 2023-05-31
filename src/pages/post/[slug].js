@@ -16,36 +16,37 @@ const PostDetails = ({ data }) => {
 
   if (router.fallback) {
     return <LoadingScreen addClassName="h-full" />;
-  }
-  return (
-    <div className="container mx-auto px-10 mb-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <div className="col-span-1 lg:col-span-8">
-          <PostDetail post={data.post} />
-          <Author author={data?.post?.author} />
-          <CommentsForm slug={data?.post?.slug} />
-          <Comments slug={data?.post?.slug} />
-        </div>
-        <div className="col-span-1 lg:col-span-4">
-          <div className="relative lg:sticky top-8">
-            <PostWidget
-              slug={data?.post?.slug}
-              categories={data?.post?.categories.map(
-                (category) => category.slug
-              )}
-            />
-            <Categories />
+  } else {
+    return (
+      <div className="container mx-auto px-10 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="col-span-1 lg:col-span-8">
+            <PostDetail post={data?.post} />
+            <Author author={data?.post?.author} />
+            <CommentsForm slug={data?.post?.slug} />
+            <Comments slug={data?.post?.slug} />
+          </div>
+          <div className="col-span-1 lg:col-span-4">
+            <div className="relative lg:sticky top-8">
+              <PostWidget
+                slug={data?.post?.slug}
+                categories={data?.post?.categories.map(
+                  (category) => category.slug
+                )}
+              />
+              <Categories />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default PostDetails;
 
 export async function getStaticProps({ params }) {
-  const data = await getPostDetails(params.slug);
+  const data = params.slug ? await getPostDetails(params.slug) : {};
   return {
     props: { data: data },
   };

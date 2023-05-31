@@ -29,5 +29,9 @@
     "tailwindcss": "3.3.2",
     "throttle": "^1.0.3",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.4"
   }
 }
